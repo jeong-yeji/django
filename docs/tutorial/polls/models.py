@@ -13,7 +13,12 @@ class Question(models.Model):
         return self.question_text
 
     def was_published_recently(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+        # 1 : 날짜가 미래인 경우 True를 반환함
+        # return self.pub_date >= timezone.now() - datetime.timedelta(days=1)
+
+        # 2 : 버그 수정 - 날짜가 과거일 때만 True를 반환하도록 수정
+        now = timezone.now()
+        return now - datetime.timedelta(days=1) <= self.pub_date <= now
 
 
 class Choice(models.Model):

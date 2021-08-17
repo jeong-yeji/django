@@ -4,6 +4,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.template import context, loader
 from django.urls import reverse
 from django.views import generic
+from django.utils import timezone
 from .models import Choice, Question
 from polls import models
 
@@ -103,13 +104,23 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         # return the last five published questions.
-        return Question.objects.order_by("-pub_date")[:5]
+        # return Question.objects.order_by("-pub_date")[:5]
+
+        # return the last five published questions(not future)
+        # pub_date <= now인 Question을 포함하는 queryset
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by(
+            "-pub_date"
+        )[:5]
 
 
 class DetailView(generic.DetailView):
     # URL에서 받을 기본키 값을 'pk'라고 기대하기 때문에 urls.py에서 변경
     model = Question
     template_name = "polls/detail.html"
+
+    def get_queryset(self):
+        # excludes any questions that aren't published yet.
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 
 class ResultsView(generic.DetailView):
