@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>name form</title>
+  </head>
+
+  <body>
+    <form action="/your-name/" method="POST">
+      {% csrf_token %}
+      <!-- form : view에서 context variable을 포함하여 template system으로 넘어옴 -->
+      {{ form }}
+      <input type="submit" value="Submit" />
+    </form>
+  </body>
+</html>
+
+<!--
+{{ form.as_table }} == {{ form }} : <tr> 태그로 감싸서 테이블 셀로 렌더링
+{{ form.as_p }} : <p> 태그로 감싸서 렌더링
+{{ form.as_ul }} : <li> 태그로 감싸서 렌더링
+-->
