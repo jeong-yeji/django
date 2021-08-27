@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from polls.models import Choice, Question
 from django import forms
+import logging
 
 # Create your views here.
 
@@ -93,3 +94,20 @@ def get_name(request):
     else:  # POST 방식이 아니면 (== GET 방식), 빈 폼을 사용자에게 보여줌
         form = NameForm()
         return render(request, "name.html", {"form": form})
+
+
+# 로깅 설정 예시
+# settings.py에서 설정된 로거를 취득함
+logger = logging.getLogger("mylogger")
+
+
+def my_view(request, arg1, arg):
+    # 필요한 로직
+    if bad_mojo:
+        # ERROR 레벨의 로그 레코드 생성
+        logger.error("Something went wrong!")
+
+
+# 추가 로깅 메소드
+# logger.log() : 원하는 로그레벨을 정해서 로그 메시지 생성
+# logger.exception() : 익셉션 스택 트레이스 정보를 포함하는 ERROR 레벨의 로그 메시지 생성

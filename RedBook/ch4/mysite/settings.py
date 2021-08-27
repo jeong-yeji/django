@@ -120,3 +120,47 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = "/static/"
+
+
+# 로깅 설정
+LOGGING_CONFIG = "logging.config.dictConfig"  # 디폴트 값이므로 생략 가능
+LOGGING = {
+    "version": 1,
+    "disalbe_existing_loggers": False,
+    "formatters": {
+        # verbose formatter : [기록 시간], 레벨 이름, [로거이름:라인번호], 로그 메시지 순으로 출력
+        "verbose": {
+            "format": "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            "datefmt": "%d/%b/%Y %H:%M:%S",
+        },
+    },
+    "handler": {
+        # file handler : DEBUG 및 그 이상의 메시지를 파일로 출력해주는 FileHandler 클래스 사용
+        # ...\RedBook\ch4\logs\logfile에 기록됨
+        "file": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": os.path.join(BASE_DIR, "logs", "mysite.log"),
+            "formatter": "verbose",
+        },
+    },
+    "loggers": {
+        "django": {  # default logger
+            "handlers": ["file"],
+            "level": "DEBUG",
+        },
+        "mysite": {
+            "handlers": ["file"],
+            "level": "DEBUG",
+        },
+    },
+}
+
+# 사용자 로그 지정
+# LOGGING_CONFIG = None
+# LOGGING = {
+#     # 로깅 컴포넌트 설정
+# }
+
+# import logging.config
+# logging.config.dictConfig(LOGGING)
