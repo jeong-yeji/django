@@ -1,0 +1,13 @@
+{% extends "base_books.html" %}
+
+{% block content %}
+<h2>Books Management System</h2>
+<ul>
+    {% for modelname in model_list %}
+    <!-- urlvar 정의 >> 모델명 클릭 시 접속할 url 추출에 사용 -->
+    <!-- add, lower filter >> 모델명: Author - urlvar: books:author_list -->
+    {% with "books:"|add:modelname|lower|add:"_list" as urlvar %}
+    <li><a href="{% url urlvar %}">{{ modelname }}</a></li>
+    {% endwith %} {% endfor %}
+</ul>
+{% endblock content%}

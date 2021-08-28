@@ -1,0 +1,17 @@
+{% extends "base_books.html" %}
+
+{% block content %}
+<h1>{{ object.title }}</h1>
+<br />
+<li>
+    Authors: 
+    {% for author in object.authors.all %} 
+        {{ author }}
+        {% if not forloop.last %}, <!-- 공동 저자인 경우 저자 이름 뒤에 콤마 출력 -->
+        {% else %}
+        {% endif %}
+    {% endfor %}
+</li>
+<li>Publisher: {{ object.publisher }}</li>
+<li>Publicaion date: {{ object.publication_date }}</li>
+{% endblock content %}
