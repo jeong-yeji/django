@@ -1,0 +1,16 @@
+{% extends 'base.html' %} {% block content %}
+<h2>yeji Django Application</h2>
+<ul>
+    <!-- app name 이용 -->
+    <!-- urlvar 지정 (if appname == books, urlvar == books:index) -->
+    <!-- {% for appname in app_list %}
+    {% with appname|add:":"|add:"index" as urlvar %}
+    <li><a href="{% url urlvar %}">{{ appname }}</a></li>
+    {% endwith %} {% endfor %} -->
+
+    <!-- app verbose_name 이용-->
+    {% for key, value in verbose_dict.items %}
+    <li><a href="{% url key|add:':index' %}">{{ value }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}
