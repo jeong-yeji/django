@@ -1,0 +1,2 @@
+[29/Aug/2021 14:07:34] DEBUG [polls.views:36] vote().question_id: 4
+[29/Aug/2021 14:07:42] DEBUG [polls.views:36] vote().question_id: 2

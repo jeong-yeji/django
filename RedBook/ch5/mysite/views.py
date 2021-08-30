@@ -8,7 +8,7 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # app name 이용
-        # context['app_list'] = ['books']
+        # context['app_list'] = ['polls', 'books']
         
         # context['app_list'] 대신 apps.py의 verbose_name 이용
         dictVerbose = {}
