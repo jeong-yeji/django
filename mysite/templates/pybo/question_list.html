@@ -16,17 +16,21 @@
                 <td>{{ forloop.counter }}</td>
                 <td>
                     <a href="{% url 'pybo:detail' question.id %}">
-            {{ question.subject }}
-          </a>
+                        {{ question.subject }}
+                    </a>
                 </td>
                 <td>{{ question.create_date }}</td>
             </tr>
-            {% endfor %} {% else %}
+            {% endfor %}
+            {% else %}
             <tr>
                 <td colspan="3">질문이 없습니다.</td>
             </tr>
             {% endif %}
         </tbody>
     </table>
+    <a href="{% url 'pybo:question_create' %}" class="btn btn-primary">
+        질문 등록하기
+    </a>
 </div>
 {% endblock content %}
