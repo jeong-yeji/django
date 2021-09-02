@@ -14,7 +14,15 @@
 </head>
 
 <body>
+    <!-- navigation bar -->
+    {% include 'navbar.html' %}
+
     {% block content %} {% endblock content %}
+
+    <!-- jQuery JS -->
+    <script src="{% static 'jquery-3.4.1.min.js' %}"></script>
+    <!-- Bootstrap JS -->
+    <script src="{% static 'bootstrap.min.js' %}"></script>
 </body>
 
 </html>
