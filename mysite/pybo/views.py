@@ -3,12 +3,16 @@ from django.http import HttpResponse
 from .models import Question, Answer
 from django.utils import timezone
 from .forms import QuestionForm, AnswerForm
+from django.core.paginator import Paginator
 
 # Create your views here.
 
 def index(request):
+    page = request.GET.get('page', '1') # url에서 값 가져오되, 기본값 1
     question_list = Question.objects.order_by('-create_date')
-    context = {'question_list': question_list}
+    paginator = Paginator(question_list, 10) # 10 questions per page
+    page_obj = paginator.get_page(page)
+    context = {'question_list': page_obj}
     return render(request, 'pybo/question_list.html', context)
 
 
