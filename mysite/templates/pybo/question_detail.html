@@ -32,7 +32,7 @@
     {% endfor %}
 
     <form action="{% url 'pybo:answer_create' question.id %}" method="POST" class="my-3">
-        {% csrf_token %} 
+        {% csrf_token %}
 
         <!-- error -->
         {% if form.errors %}
@@ -47,7 +47,8 @@
         {% endif %}
 
         <div class="form-group">
-            <textarea name="content" id="content" class="form-control" rows="10"></textarea>
+            <!-- 로그아웃 상태에서는 작성할 수 없도록 설정 -->
+            <textarea name="content" id="content" {% if not user.isauthenticated %}disabled{% endif %} class="form-control" rows="10"></textarea>
         </div>
         <input type="submit" value="답변 등록" class="btn btn-primary" />
     </form>
