@@ -1,2 +1,4 @@
-RedBook/ch5/secrets.json
-mysite/secrets.json
+secrets.json
+db.sqlite3
+*.pyc
+__pycache__
