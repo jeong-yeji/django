@@ -10,6 +10,7 @@ class Question(models.Model):
     modify_date = models.DateTimeField(null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_question')
     voter = models.ManyToManyField(User, related_name='voter_question')
+    view_count = models.IntegerField(blank=True, default=0)
     # author와 voter가 모두 User 모델을 참조하므로
     # User.question_set과 같이 User 모델을 통해 Question 데이터에 접근할 경우 어떤걸 참조할지 지정해야됨
     # 특정 사용자가 작성한 질문을 얻는 코드 : some_user.author_question.all()
