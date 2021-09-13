@@ -4,12 +4,13 @@ from pybo.models import Question, Answer, Comment
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['subject', 'content']
+        fields = ['category', 'subject', 'content']
         # widgets = { # bootstrap 적용을 위해 사용
         #     'subject': forms.TextInput(attrs={'class': 'form-control'}),
         #     'content': forms.Textarea(attrs={'class': 'form-control', 'rows': 10}),
         # }
         labels = {
+            'category': '카테고리',
             'subject': '제목',
             'content': '내용',
         }

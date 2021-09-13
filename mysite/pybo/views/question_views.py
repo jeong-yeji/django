@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 
 from ..forms import QuestionForm
-from ..models import Question
+from ..models import Question, Category
 
 ## 질문 관리 ##
 
@@ -20,7 +20,8 @@ def question_create(request):
             return redirect('pybo:index')
     else: # GET 방식
         form = QuestionForm()
-    context = {'form': form}
+    category_list = Category.objects.all()
+    context = {'form': form, 'category_list': category_list}
     return render(request, 'pybo/question_form.html', context)
 
 
@@ -43,7 +44,8 @@ def question_modify(request, question_id):
     else: # GET 방식
         # 기존 내용 반영해서 폼 생성
         form = QuestionForm(instance=question)
-    context = {'form': form}
+    category_list = Category.objects.all()
+    context = {'form': form, 'category_list': category_list}
     return render(request, 'pybo/question_form.html', context)
 
 

@@ -13,7 +13,10 @@
     </div>
     {% endif %}
 
-    <h2 class="border-bottom py-2">{{ question.subject }}</h2>
+    <div class="row border-bottom py-2">
+        <h5 class="d-flex flex-row justify-content-center align-items-center mx-2">[{{ question.category.name|default_if_none:'' }}]</h5>
+        <h2 class="d-flex flex-row justify-content-center align-items-center">{{ question.subject }}</h2>
+    </div>
     <div class="row my-3">
         <!-- 추천 -->
         <div class="col-1">

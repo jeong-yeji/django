@@ -19,6 +19,15 @@
         {% endif %}
 
         <div class="form-group">
+            <label for="category" class="mr-2">카테고리</label>
+            <select class="form-contorl" name="category" id="category" style="width:200px">
+                <option value="all">--------</option>
+                {% for category in category_list %}
+                    <option value="{{ category.id }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
             <label for="subject">제목</label>
             <input type="text" class="form-control" name="subject" id="subject" value="{{ form.subject.value|default_if_none:'' }}" />
         </div>

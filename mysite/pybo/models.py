@@ -3,13 +3,22 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+class Category(models.Model):
+    name = models.CharField(max_length=20, unique=True)
+    description = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+
 class Question(models.Model):
     subject = models.CharField(max_length=200)
     content = models.TextField()
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='category_question')
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_question')
-    voter = models.ManyToManyField(User, related_name='voter_question')
+    voter = models.ManyToManyField(User, related_name='voter_question', blank=True)
     view_count = models.IntegerField(blank=True, default=0)
     # author와 voter가 모두 User 모델을 참조하므로
     # User.question_set과 같이 User 모델을 통해 Question 데이터에 접근할 경우 어떤걸 참조할지 지정해야됨

@@ -5,13 +5,25 @@
 <div class="container my-3">
     <!-- justify-content-between : 양쪽 정렬 -->
     <div class="row justify-content-between my-3">
-        <!-- 정렬 -->
-        <div class="col-2">
-            <select class="form-control so">
-                <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
-                <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>추천순</option>
-                <option value="popular" {% if so == 'popular' %}selected{% endif %}>인기순</option>
-            </select>
+        <div class="row col-6">
+            <!-- category -->
+            <div class="col-4">
+                <select class="form-control cate">
+                    <option value="all" {% if cate == 'all' %}selected{% endif %}>----</option>
+                    {% for category in category_list %}
+                        <option value="{{ category.name }}" {% if cate == category.name %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <!-- 정렬 -->
+            <div class="col-4">
+                <select class="form-control so">
+                    <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
+                    <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>추천순</option>
+                    <option value="popular" {% if so == 'popular' %}selected{% endif %}>인기순</option>
+                </select>
+            </div>
         </div>
 
         <!-- 검색 -->
@@ -27,6 +39,7 @@
             <tr class="text-center thead-dark">
                 <th>번호</th>
                 <th>추천</th>
+                <th>구분</th>
                 <th style="width:50%;">제목</th>
                 <th>글쓴이</th>
                 <th>조회수</th>
@@ -52,6 +65,7 @@
                         </span>
                         {% endif %}
                     </td>
+                    <td>{{ question.category.name|default_if_none:'' }}</td>
                     <td class="text-left">
                         <a href="{% url 'pybo:detail' question.id %}">
                             {{ question.subject }}
@@ -125,6 +139,7 @@
     <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
     <input type="hidden" id="page" name="page" value="{{ page }}">
     <input type="hidden" id="so" name="so" value="{{ so }}">
+    <input type="hidden" id="cate" name="cate" value="{{ cate }}">
 </form>
 {% endblock content %}
 
@@ -148,6 +163,13 @@ $(document).ready(function(){
     // searchForm.so == 변경된 class가 so인 element으로 설정해 폼 요청
     $(".so").on('change', function() {
         $("#so").val($(this).val());
+        $("#page").val(1);
+        $("#searchForm").submit();
+    });
+
+    // category 변경 시 폼 요청
+    $(".cate").on('change', function() {
+        $("#cate").val($(this).val());
         $("#page").val(1);
         $("#searchForm").submit();
     });

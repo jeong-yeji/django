@@ -2,25 +2,32 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, Count
 
-from ..models import Question
+from ..models import Question, Category
 
 ## 기본 관리 ##
 
 def index(request):
     # parameter
-    page = request.GET.get('page', '1')  # page, 기본값 1
-    kw = request.GET.get('kw', '')       # 검색어
-    so = request.GET.get('so', 'recent') # 정렬 기준
+    page = request.GET.get('page', '1')   # page, 기본값 1
+    kw = request.GET.get('kw', '')        # 검색어
+    so = request.GET.get('so', 'recent')  # 정렬 기준
+    cate = request.GET.get('cate', 'all')
+
+    # category
+    if cate == 'all':
+        question_list = Question.objects.all()
+    else:
+        question_list = Question.objects.filter(category__name=cate)
 
     # 정렬
     # annotate() : 임의의 필드를 임시로 추가해주는 함수 > filter(), order_by()에서 사용 가능
     # order_by의 기준이 여러개인 경우, 첫번째 항목부터 우선순위를 매김
     if so == 'recommend': # 추천순
-        question_list = Question.objects.annotate(num_voter=Count('voter')).order_by('-num_voter', '-create_date')
+        question_list = question_list.annotate(num_voter=Count('voter')).order_by('-num_voter', '-create_date')
     elif so == 'popular': # 인기순 : 답변이 많이 달린 순으로
-        question_list = Question.objects.annotate(num_answer=Count('answer')).order_by('-num_answer', '-create_date')
+        question_list = question_list.annotate(num_answer=Count('answer')).order_by('-num_answer', '-create_date')
     else: # default: 최신순
-        question_list = Question.objects.order_by('-create_date')
+        question_list = question_list.order_by('-create_date')
 
     # 검색
     if kw:
@@ -37,7 +44,10 @@ def index(request):
     paginator = Paginator(question_list, 10) # 10 questions per page
     page_obj = paginator.get_page(page)
 
-    context = {'question_list': page_obj, 'page': page, 'kw': kw, 'so': so}
+    # category
+    category_list = Category.objects.all()
+
+    context = {'question_list': page_obj, 'page': page, 'kw': kw, 'so': so, 'category_list': category_list, 'cate': cate}
     return render(request, 'pybo/question_list.html', context)
 
 
