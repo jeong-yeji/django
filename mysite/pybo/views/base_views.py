@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, Count
 
-from ..models import Question, Category
+from ..models import Question, Category, Answer, Comment
 
 ## 기본 관리 ##
 
@@ -57,3 +57,12 @@ def detail(request, question_id):
     question.view_count += 1
     question.save()
     return render(request, 'pybo/question_detail.html', context)
+
+
+def recent(request):
+    # parameter
+    answer_list = Answer.objects.all().order_by('-create_date')
+    comment_list = Comment.objects.all().order_by('-create_date')
+
+    context = {'answer_list': answer_list, 'comment_list': comment_list}
+    return render(request, 'pybo/recent_list.html', context)

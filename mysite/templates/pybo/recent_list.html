@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load pybo_filter %}
+
+{% block content %}
+<div class="container my-3">
+    <h4 class="">최근 이력</h4>
+    <h6 class="border-bottom pb-2 mb-3">최근 20개의 답변과 댓글입니다</h6>
+    <ul class="nav nav-tabs mb-3" id="recentTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="answer-tab" data-toggle="tab" href="#answer" role="tab" aria-controls="answer" aria-selected="true">최근 답변</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="comment-tab" data-toggle="tab" href="#comment" role="tab" aria-controls="comment" aria-selected="false">최근 댓글</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="recentTabContent">
+        <div class="tab-pane fade show active" id="answer" role="tabpanel" aria-labelledby="answer-tab">
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr class="text-center">
+                            <th>구분</th>
+                            <th>작성자</th>
+                            <th style="width:60%">(제목) 내 용</th>
+                            <th>날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for answer in answer_list %}
+                            <tr class="text-center">
+                                <td>{{ answer.question.category.name }}</td>
+                                <td>{{ answer.author }}</td>
+                                <td class="text-left">
+                                    <a href="{% url 'pybo:detail' answer.question.id %}#answer_{{ answer.id }}">({{ answer.question.subject }}) {{ answer.content }}</a>
+                                </td>
+                                <td class="small">{{ answer.create_date }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="comment" role="tabpanel" aria-labelledby="comment-tab">
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <thead>
+                        <tr class="text-center">
+                            <th>구분</th>
+                            <th>작성자</th>
+                            <th style="width:60%">(질문) 내 용</th>
+                            <th>날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for comment in comment_list %}
+                            <tr class="text-center">
+                                {% if comment.question %}
+                                    <td>{{ comment.question.category.name }}</td>
+                                    <td>{{ comment.author }}</td>
+                                    <td class="text-left">
+                                        <a href="{% url 'pybo:detail' comment.question.id %}#comment_{{ comment.id }}">({{ comment.question.subject }}) {{ comment.content }}</a>
+                                    </td>
+                                    <td class="small">{{ comment.create_date }}</td>
+                                {% else %}
+                                    <td>{{ comment.answer.question.category.name }}</td>
+                                    <td>{{ comment.author }}</td>
+                                    <td class="text-left">
+                                        <a href="{% url 'pybo:detail' comment.answer.question.id %}#comment_{{ comment.id }}">({{ comment.answer.question.subject }}) {{ comment.content }}</a>
+                                    </td>
+                                    <td class="small">{{ comment.create_date }}</td>
+                                {% endif %}     
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
