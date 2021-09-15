@@ -17,12 +17,17 @@
             </div>
     
             <!-- 정렬 -->
-            <div class="col-4">
+            <!-- <div class="col-4">
                 <select class="form-control so">
                     <option value="recent" {% if so == 'recent' %}selected{% endif %}>최신순</option>
                     <option value="recommend" {% if so == 'recommend' %}selected{% endif %}>추천순</option>
                     <option value="popular" {% if so == 'popular' %}selected{% endif %}>인기순</option>
                 </select>
+            </div> -->
+            <div class="btn-group col-3" role="group">
+                <button type="button" title="최신순" class="so-link btn btn-secondary so {% if so == 'recent' %}active{% endif %}" data-so="recent"><i class="bi bi-list-ul"></i></button>
+                <button type="button" title="추천순" class="so-link btn btn-secondary so {% if so == 'recommend' %}active{% endif %}" data-so="recommend"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+                <button type="button" title="인기순" class="so-link btn btn-secondary so {% if so == 'popular' %}active{% endif %}" data-so="popular"><i class="bi bi-lightbulb-fill"></i></button>
             </div>
         </div>
 
@@ -161,8 +166,8 @@ $(document).ready(function(){
     });
 
     // searchForm.so == 변경된 class가 so인 element으로 설정해 폼 요청
-    $(".so").on('change', function() {
-        $("#so").val($(this).val());
+    $(".so-link").on('click', function() {
+        $("#so").val($(this).data("so"));
         $("#page").val(1);
         $("#searchForm").submit();
     });
