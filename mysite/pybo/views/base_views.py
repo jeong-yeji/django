@@ -1,3 +1,4 @@
+from django.core import paginator
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, Count
@@ -52,10 +53,27 @@ def index(request):
 
 
 def detail(request, question_id):
+    # parameters
+    page = request.GET.get('page', '1')
+    so = request.GET.get('so', 'recommend')
     question = get_object_or_404(Question, pk=question_id)
-    context = {'question': question}
+
+    # 조회수
     question.view_count += 1
     question.save()
+
+    # 답변 정렬
+    answer_list = Answer.objects.filter(question=question).annotate(num_voter=Count('voter'))
+    if so == 'recommend':
+        answer_list = answer_list.order_by('-num_voter', 'create_date')
+    else: # recent, 시간순
+        answer_list = answer_list.order_by('create_date', '-num_voter')
+
+    # 답변 페이징
+    paginator = Paginator(answer_list, 5)
+    page_obj = paginator.get_page(page)
+    
+    context = {'question': question, 'answer_list': page_obj, 'page': page, 'so': so}
     return render(request, 'pybo/question_detail.html', context)
 
 

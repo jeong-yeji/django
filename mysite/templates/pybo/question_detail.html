@@ -104,11 +104,18 @@
         </div>
     </div>
 
-    <h5 class="border-bottom my-3 py-3">
-        {{ question.answer_set.count }}개의 답변이 있습니다.
-    </h5>
-
-    {% for answer in question.answer_set.all %}
+    <a name="answer_start"></a>
+    <div class="row justify-content-between border-bottom my-3">
+        <h5 class="my-2 py-2">
+            {{ question.answer_set.count }}개의 답변이 있습니다.
+        </h5>
+        <div class="btn-group my-3 mr-2" role="group">
+            <button type="button" title="추천순" class="so-link btn btn-secondary so {% if so == 'recommend' %}active{% endif %}" data-so="recommend"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+            <button type="button" title="시간순" class="so-link btn btn-secondary so {% if so == 'recent' %}active{% endif %}" data-so="recent"><i class="bi bi-list-ul"></i></button>
+        </div>
+    </div>
+    
+    {% for answer in answer_list %}
     <!-- anchor element - 답변 등록, 답변 수정 -->
     <a name="answer_{{ answer.id }}"></a>
     <div class="row my-3">
@@ -193,6 +200,47 @@
     </div>
     {% endfor %}
 
+    <!-- pagination -->
+    <ul class="pagination justify-content-center">
+        <!-- previous page -->
+        {% if answer_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" data-page="{{ answer_list.previous_page_number }}" href="#">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+
+        <!-- page list -->
+        {% for page_number in answer_list.paginator.page_range %}
+            <!-- page 표시 제한 (앞뒤로 5개씩 보이도록 지정) -->
+            {% if page_number >= answer_list.number|add:-5 and page_number <= answer_list.number|add:5 %}
+                {% if page_number == answer_list.number %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" data-page="{{ page_number }}" href="#">{{ page_number}}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" data-page="{{ page_number }}" href="#">{{ page_number}}</a>
+                </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <!-- next page -->
+        {% if answer_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" data-page="{{ answer_list.next_page_number }}" href="#">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+
     <form action="{% url 'pybo:answer_create' question.id %}" method="POST" class="my-3">
         {% csrf_token %}
 
@@ -219,6 +267,10 @@
         <input type="submit" value="답변 등록" class="btn btn-primary" />
     </form>
 </div>
+<form id="searchForm" method="GET" action="{% url 'pybo:detail' question.id %}#answer_start">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+    <input type="hidden" id="so" name="so" value="{{ so }}">
+</form>
 {% endblock content %}
 
 {% block script %}
@@ -234,6 +286,15 @@ $(document).ready(function(){
         if(confirm("정말로 추천하시겠습니까?")) {
             location.href = $(this).data('uri');
         }
+    });
+    $(".page-link").on('click', function(){
+        $("#page").val($(this).data("page"));
+        $("#searchForm").submit();
+    });
+    $(".so-link").on('click', function() {
+        $("#so").val($(this).data("so"));
+        $("#page").val(1);
+        $("#searchForm").submit();
     });
 });
 </script>
