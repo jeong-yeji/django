@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+<!-- social login -->
+{% load socialaccount %}		
+{% providers_media_js %}
 
 {% block content %}
     <div class="container my-3">
@@ -26,6 +29,20 @@
                 <input type="password" class="form-control" name="password" id="password" value="{{ form.password.value|default_if_none:'' }}">
             </div>
             <button type="submit" class="btn btn-primary">로그인</button>
+            <hr>
+            <h5>SOCIAL LOGIN</h5>
+            <div>
+                <a href="{% provider_login_url 'naver' %}">
+                    <button type="button" class="btn btn-success">
+                        NAVER
+                    </button>
+                </a>
+                <a href="{% provider_login_url 'google' %}">
+                    <button type="button" class="btn btn-primary">
+                        GOOGLE
+                    </button>
+                </a>
+            </div>
         </form>
     </div>
 {% endblock content %}
