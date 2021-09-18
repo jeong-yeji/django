@@ -1,0 +1,14 @@
+{% include 'profile.html' %}
+
+{% block tap-content %}
+<div class="container my-3">
+    <div>
+        <strong>이름</strong>
+        {{ user.username }}
+    </div>
+    <div>
+        <strong>이메일</strong>
+        {{ user.email }}
+    </div>
+</div>
+{% endblock tap-content %}

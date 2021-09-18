@@ -16,7 +16,7 @@
             </li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-                <a class="nav-link">
+                <a class="nav-link" href="{% url 'common:profile_base' user.id %}">
                     <i class="bi bi-person-fill"></i>
                     {{ user.username }}님
                 </a>

@@ -1,0 +1,22 @@
+{% include 'base.html' %}
+
+{% block content %}
+<div class="container my-3">
+    <h5 class="border-bottom pb-2 mb-3">{{ user.username }}</h5>
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link {% if profile_type == 'base' %}active{% endif %}" href="{% url 'common:profile_base' user.id %}">기본정보</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if profile_type == 'question' %}active{% endif %}" href="{% url 'common:profile_question' user.id %}">질문</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if profile_type == 'answer' %}active{% endif %}" href="{% url 'common:profile_answer' user.id %}">답변</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if profile_type == 'comment' %}active{% endif %}" href="{% url 'common:profile_comment' user.id %}">댓글</a>
+        </li>
+    </ul>
+    {% block tap-content %} {% endblock tap-content %}
+</div>
+{% endblock content %}   

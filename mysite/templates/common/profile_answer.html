@@ -1,0 +1,112 @@
+{% include 'profile.html' %}
+{% load pybo_filter %}
+
+{% block tap-content %}
+<div class="container my-3">
+    <div class="btn-group mb-2" role="group">
+        <button type="button" title="최신순" class="so-link btn btn-secondary so {% if so == 'recent' %}active{% endif %}" data-so="recent"><i class="bi bi-list-ul"></i></button>
+        <button type="button" title="추천순" class="so-link btn btn-secondary so {% if so == 'recommend' %}active{% endif %}" data-so="recommend"><i class="bi bi-hand-thumbs-up-fill"></i></button>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr class="text-center thead-dark">
+                <th>번호</th>
+                <th>구분</th>
+                <th>추천</th>
+                <th style="width:60%">(제목) 내 용</th>
+                <th>날짜</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if answer_list %}
+                {% for answer in answer_list %}
+                <tr class="text-center">
+                    <td>{{ answer_list.paginator.count|sub:answer_list.start_index|sub:forloop.counter0|add:1 }}</td>
+                    <td>{{ answer.question.category.name|default_if_none:'' }}</td>
+                    <td>
+                        {% if answer.voter.all.count > 0 %}
+                        <span class="badge badge-warning px-2 py-1">
+                            {{ answer.voter.all.count }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td class="text-left">
+                        <a href="{% url 'pybo:detail' answer.question.id %}#answer_{{ answer.id }}">({{ answer.question.subject }}) {{ answer.content }}</a>
+                    </td>
+                    <td>{{ answer.create_date }}</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="3">등록한 답변이 없습니다.</td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- pagination -->
+    <ul class="pagination justify-content-center">
+        <!-- previous page -->
+        {% if answer_list.has_previous %}
+        <li class="page-item">
+            <a class="page-link" data-page="{{ answer_list.previous_page_number }}" href="#">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+        </li>
+        {% endif %}
+
+        <!-- page list -->
+        {% for page_number in answer_list.paginator.page_range %}
+            <!-- page 표시 제한 (앞뒤로 5개씩 보이도록 지정) -->
+            {% if page_number >= answer_list.number|add:-5 and page_number <= answer_list.number|add:5 %}
+                {% if page_number == answer_list.number %}
+                <li class="page-item active" aria-current="page">
+                    <a class="page-link" data-page="{{ page_number }}" href="#">{{ page_number}}</a>
+                </li>
+                {% else %}
+                <li class="page-item">
+                    <a class="page-link" data-page="{{ page_number }}" href="#">{{ page_number}}</a>
+                </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <!-- next page -->
+        {% if answer_list.has_next %}
+        <li class="page-item">
+            <a class="page-link" data-page="{{ answer_list.next_page_number }}" href="#">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+<form id="searchForm" method="GET" action="{% url 'common:profile_answer' user.id %}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+    <input type="hidden" id="so" name="so" value="{{ so }}">
+</form>
+{% endblock tap-content %}
+
+{% block script %}
+<script type="text/javascript">
+$(document).ready(function(){
+    // searchForm.page == 클릭한 링크의 data-page로 설정해 폼 요청
+    $(".page-link").on('click', function(){
+        $("#page").val($(this).data("page"));
+        $("#searchForm").submit();
+    });
+
+    // searchForm.so == 변경된 class가 so인 element으로 설정해 폼 요청
+    $(".so-link").on('click', function() {
+        $("#so").val($(this).data("so"));
+        $("#page").val(1);
+        $("#searchForm").submit();
+    });
+});
+</script>
+{% endblock script %}
