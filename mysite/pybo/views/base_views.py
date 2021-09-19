@@ -14,11 +14,12 @@ def index(request):
     so = request.GET.get('so', 'recent')  # 정렬 기준
     cate = request.GET.get('cate', 'all')
 
+    notice_list = Question.objects.filter(is_notice=True)
+    question_list = Question.objects.filter(is_notice=False)
+
     # category
-    if cate == 'all':
-        question_list = Question.objects.all()
-    else:
-        question_list = Question.objects.filter(category__name=cate)
+    if cate != 'all':
+        question_list = question_list.filter(category__name=cate)
 
     # 정렬
     # annotate() : 임의의 필드를 임시로 추가해주는 함수 > filter(), order_by()에서 사용 가능
@@ -48,7 +49,7 @@ def index(request):
     # category
     category_list = Category.objects.all()
 
-    context = {'question_list': page_obj, 'page': page, 'kw': kw, 'so': so, 'category_list': category_list, 'cate': cate}
+    context = {'question_list': page_obj, 'notice_list': notice_list, 'page': page, 'kw': kw, 'so': so, 'category_list': category_list, 'cate': cate}
     return render(request, 'pybo/question_list.html', context)
 
 

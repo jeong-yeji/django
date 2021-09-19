@@ -52,6 +52,42 @@
             </tr>
         </thead>
         <tbody>
+            <!-- notice list -->
+            {% if notice_list %}
+                {% for notice in notice_list %}
+                <tr class="text-center">
+                    <td>-</td>
+                    <td>
+                        {% if notice.voter.all.count > 0 %}
+                        <span class="badge badge-warning px-2 py-1">
+                            {{ notice.voter.all.count }}
+                        </span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="badge badge-danger">
+                            <i class="bi bi-volume-up-fill"></i>
+                            공지
+                        </span>
+                    </td>
+                    <td class="text-left">
+                        <a href="{% url 'pybo:detail' notice.id %}">
+                            {{ notice.subject }}
+                            <!-- 답변 개수 표시 -->
+                            {% if notice.answer_set.count > 0 %}
+                                <span class="text-danger small ml-2">
+                                    {{ notice.answer_set.count }}
+                                </span>
+                            {% endif %}
+                        </a>
+                    </td>
+                    <td>{{ notice.author.username }}</td>
+                    <td>{{ notice.view_count }}</td>
+                    <td>{{ notice.create_date }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+            <!-- question list -->
             {% if question_list %}
                 {% for question in question_list %}
                 <tr class="text-center">
