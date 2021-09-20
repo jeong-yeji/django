@@ -2,6 +2,7 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
+from allauth.socialaccount.models import SocialAccount
 
 from django.contrib.auth.models import User
 from pybo.models import Question, Answer, Comment
@@ -10,8 +11,9 @@ from pybo.models import Question, Answer, Comment
 def base(request, user_id):
     # parameter
     user = get_object_or_404(User, pk=user_id)
-
-    context = {'user': user, 'profile_type': 'base'}
+    is_social = SocialAccount.objects.filter(user=user).exists()
+    
+    context = {'user': user, 'is_social': is_social, 'profile_type': 'base'}
     return render(request, 'common/profile_base.html', context)
 
 

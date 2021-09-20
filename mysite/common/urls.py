@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import common_views, profile_views
+from .views import common_views, profile_views, setting_views
 
 app_name = 'common'
 urlpatterns = [
@@ -13,4 +13,7 @@ urlpatterns = [
     path('profile/question/<int:user_id>/', profile_views.question, name='profile_question'),
     path('profile/answer/<int:user_id>/', profile_views.answer, name='profile_answer'),
     path('profile/comment/<int:user_id>/', profile_views.comment, name='profile_comment'),
+
+    # password
+    path('password_change/', setting_views.password, name='change_password'),
 ]

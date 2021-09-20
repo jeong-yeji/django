@@ -2,13 +2,14 @@
 
 {% block tap-content %}
 <div class="container my-3">
-    <div>
-        <strong>이름</strong>
-        {{ user.username }}
+    <div class="my-2">이름</div>
+    <input type="text" disabled=True value="{{ user.username }}">
+    <div class="my-2">이메일</div>
+    <input type="text" disabled=True value="{{ user.email }}">
+    {% if not is_social %}
+    <div class="my-2">
+        <a class="btn btn-outline-danger my-2" href="{% url 'common:change_password' %}" role="button">비밀번호 변경</a>
     </div>
-    <div>
-        <strong>이메일</strong>
-        {{ user.email }}
-    </div>
+    {% endif %}
 </div>
 {% endblock tap-content %}
