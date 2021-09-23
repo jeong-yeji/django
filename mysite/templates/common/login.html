@@ -9,9 +9,12 @@
             <div class="col-4">
                 <h4>로그인</h4>
             </div>
-            <div class="col-8 text-right">
+            <div class="d-flex flex-column col-8 text-right">
                 <span>
                     또는 <a href="{% url 'common:signup' %}">계정을 만드세요.</a>
+                </span>
+                <span>
+                    <a href="{% url 'password_reset' %}">비밀번호를 잊으셨나요?</a>
                 </span>
             </div>
         </div>

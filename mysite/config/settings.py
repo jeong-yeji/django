@@ -155,6 +155,7 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1
 
+LOGIN_URL = '/common/login/'
 # 로그인 성공 시 자동으로 이동할 URL
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
@@ -170,3 +171,13 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 } # 구글 email 지정이 안돼서 직접 지정..
+
+
+# email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = '587'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = get_secret("EMAIL_USER")
+EMAIL_HOST_PASSWORD = get_secret("EMAIL_PASSWORD")
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
