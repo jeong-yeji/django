@@ -31,3 +31,6 @@ urlpatterns = [
     path('password_reset_confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('password_reset_complete/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
+
+# 404 error 발생 시 호출할 함수
+handler404 = 'common.views.common_views.page_not_found'
