@@ -8,6 +8,7 @@ from ..models import Question, Category, Answer, Comment
 ## 기본 관리 ##
 
 def index(request):
+    3/0
     # parameter
     page = request.GET.get('page', '1')   # page, 기본값 1
     kw = request.GET.get('kw', '')        # 검색어
