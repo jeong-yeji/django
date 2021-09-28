@@ -186,7 +186,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'filter': {
+    'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
@@ -204,20 +204,20 @@ LOGGING = {
             'format': '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
         },
     },
-    'handler': {
+    'handlers': {
         'console': {
             'level': 'INFO',
-            'filter': ['requre_debug_true'],
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
         },
         'django.server': {
             'level': 'INFO',
-            'filter': 'logging.StreamHandler',
+            'class': 'logging.StreamHandler',
             'formatter': 'django.server',
         },
         'mail_admins': {
             'level': 'ERROR',
-            'filter': ['require_debug_false'],
+            'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
         },
         'file': {
@@ -225,18 +225,18 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'logs/mysite.log',
-            'maxBytes': 1024*1024*5, # 5MB
+            'maxBytes': 1024*1024*5,  # 5 MB
             'backupCount': 5,
             'formatter': 'standard',
         },
     },
     'loggers': {
         'django': {
-            'handler': ['console', 'mail_admins', 'file'],
+            'handlers': ['console', 'mail_admins', 'file'],
             'level': 'INFO',
         },
         'django.server': {
-            'handler': ['django.server'],
+            'handlers': ['django.server'],
             'level': 'INFO',
             'propagate': False,
         },
