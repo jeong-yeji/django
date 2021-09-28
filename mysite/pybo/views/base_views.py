@@ -5,10 +5,13 @@ from django.db.models import Q, Count
 
 from ..models import Question, Category, Answer, Comment
 
+import logging
+logger = logging.getLogger('pybo')
+
 ## 기본 관리 ##
 
 def index(request):
-    3/0
+    logger.info("INFO 레벨로 출력")
     # parameter
     page = request.GET.get('page', '1')   # page, 기본값 1
     kw = request.GET.get('kw', '')        # 검색어
